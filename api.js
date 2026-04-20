@@ -137,4 +137,83 @@ function cacheStats() {
   return { size: cache.size, entries: [...cache.keys()] };
 }
 
-module.exports = { lookupIOC, lookupBatch, aipmAuditUrl, clearCache, cacheStats, DEFAULT_API_URL };
+/**
+ * Look up a Tor relay by IP address.
+ *
+ * @param {string} ip - relay IP address
+ * @param {Object} [options]
+ * @param {string} [options.apiKey] - DugganUSA API key
+ * @param {string} [options.apiUrl] - API base URL
+ * @param {number} [options.timeout] - request timeout in ms
+ * @returns {Promise<Object>}
+ */
+async function lookupRelay(ip, options = {}) {
+  const apiUrl = options.apiUrl || DEFAULT_API_URL;
+  const timeout = options.timeout || DEFAULT_TIMEOUT;
+
+  try {
+    const url = apiUrl + '/tor/relay/' + encodeURIComponent(ip);
+    const headers = {};
+    if (options.apiKey) headers['Authorization'] = 'Bearer ' + options.apiKey;
+
+    return await httpGet(url, headers, timeout);
+  } catch (err) {
+    return { found: false, error: err.message };
+  }
+}
+
+/**
+ * Hunt for suspicious Tor relays.
+ *
+ * @param {Object} [options]
+ * @param {string} [options.apiKey] - DugganUSA API key
+ * @param {string} [options.apiUrl] - API base URL
+ * @param {number} [options.timeout] - request timeout in ms
+ * @returns {Promise<Object>}
+ */
+async function huntTorRelays(options = {}) {
+  const apiUrl = options.apiUrl || DEFAULT_API_URL;
+  const timeout = options.timeout || DEFAULT_TIMEOUT;
+
+  try {
+    const url = apiUrl + '/tor/hunt';
+    const headers = {};
+    if (options.apiKey) headers['Authorization'] = 'Bearer ' + options.apiKey;
+
+    return await httpGet(url, headers, timeout);
+  } catch (err) {
+    return { found: false, error: err.message };
+  }
+}
+
+/**
+ * Quick boolean check if an IP is a known Tor relay.
+ *
+ * @param {string} ip - IP address to check
+ * @param {Object} [options]
+ * @param {string} [options.apiKey] - DugganUSA API key
+ * @param {string} [options.apiUrl] - API base URL
+ * @param {number} [options.timeout] - request timeout in ms
+ * @returns {Promise<{isRelay: boolean, data?: Object, error?: string}>}
+ */
+async function checkTorRelay(ip, options = {}) {
+  const apiUrl = options.apiUrl || DEFAULT_API_URL;
+  const timeout = options.timeout || DEFAULT_TIMEOUT;
+
+  try {
+    const url = new URL(apiUrl + '/tor/relays');
+    url.searchParams.set('q', ip);
+    url.searchParams.set('limit', '1');
+
+    const headers = {};
+    if (options.apiKey) headers['Authorization'] = 'Bearer ' + options.apiKey;
+
+    const json = await httpGet(url.toString(), headers, timeout);
+    const hits = json.data?.hits || json.data?.relays || [];
+    return { isRelay: hits.length > 0, data: hits[0] || null };
+  } catch (err) {
+    return { isRelay: false, error: err.message };
+  }
+}
+
+module.exports = { lookupIOC, lookupBatch, aipmAuditUrl, clearCache, cacheStats, lookupRelay, huntTorRelays, checkTorRelay, DEFAULT_API_URL };

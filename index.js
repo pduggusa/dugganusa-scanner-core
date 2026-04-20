@@ -26,8 +26,8 @@
  */
 
 const { extractIOCs, PATTERNS, SKIP_IPS, SKIP_DOMAINS, findAllMatches } = require('./patterns');
-const { lookupIOC, lookupBatch, aipmAuditUrl, clearCache, cacheStats, DEFAULT_API_URL } = require('./api');
-const { summarize, formatTable, formatMarkdown, formatJSON } = require('./formatter');
+const { lookupIOC, lookupBatch, aipmAuditUrl, clearCache, cacheStats, lookupRelay, huntTorRelays, checkTorRelay, DEFAULT_API_URL } = require('./api');
+const { summarize, formatTable, formatMarkdown, formatJSON, formatRelay } = require('./formatter');
 
 module.exports = {
   // Pattern extraction
@@ -45,9 +45,15 @@ module.exports = {
   cacheStats,
   DEFAULT_API_URL,
 
+  // Tor relay
+  lookupRelay,
+  huntTorRelays,
+  checkTorRelay,
+
   // Formatting
   summarize,
   formatTable,
   formatMarkdown,
   formatJSON,
+  formatRelay,
 };

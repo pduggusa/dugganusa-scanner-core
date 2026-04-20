@@ -11,6 +11,7 @@ const PATTERNS = {
   domain: /\b(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:com|net|org|io|ai|dev|xyz|info|biz|co|me|app|cloud|online|site|tech|ru|cn|ir|kp|de|fr|nl|uk|au|br|jp|kr|sg|il|sa|ae)\b/gi,
   sha256: /\b[a-fA-F0-9]{64}\b/g,
   cve: /CVE-\d{4}-\d{4,7}/gi,
+  onion: /\b[a-z2-7]{56}\.onion\b/g,
 };
 
 const SKIP_IPS = new Set([

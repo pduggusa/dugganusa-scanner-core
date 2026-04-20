@@ -113,4 +113,19 @@ function formatJSON(results) {
   }, null, 2);
 }
 
-module.exports = { summarize, formatTable, formatMarkdown, formatJSON };
+/**
+ * Format a Tor relay record as a one-line summary.
+ * @param {Object} relayData - relay object from lookupRelay or checkTorRelay
+ * @returns {string}
+ */
+function formatRelay(relayData) {
+  if (!relayData) return 'No relay data';
+  const nickname = relayData.nickname || relayData.name || '?';
+  const flags = Array.isArray(relayData.flags) ? relayData.flags.join(',') : (relayData.flags || '?');
+  const country = relayData.country || relayData.geo?.country || '?';
+  const org = relayData.org || relayData.as_name || '?';
+  const bw = relayData.bandwidth || relayData.observed_bandwidth || '?';
+  return 'Tor Relay: ' + nickname + ' | ' + flags + ' | ' + country + ' | ' + org + ' | BW:' + bw;
+}
+
+module.exports = { summarize, formatTable, formatMarkdown, formatJSON, formatRelay };
