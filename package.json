@@ -1,6 +1,6 @@
 {
   "name": "@dugganusa/threat-scanner-core",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Core IOC scanning engine for DugganUSA integrations. Extract IPs, domains, hashes, CVEs from text and correlate against 1M+ threat indicators.",
   "main": "index.js",
   "exports": {
@@ -9,7 +9,16 @@
     "./api": "./api.js",
     "./formatter": "./formatter.js"
   },
-  "keywords": ["ioc", "threat-intelligence", "stix", "cybersecurity", "malware", "cve", "scanner", "dugganusa"],
+  "keywords": [
+    "ioc",
+    "threat-intelligence",
+    "stix",
+    "cybersecurity",
+    "malware",
+    "cve",
+    "scanner",
+    "dugganusa"
+  ],
   "author": "DugganUSA LLC <patrick@dugganusa.com>",
   "license": "MIT",
   "repository": {
@@ -19,5 +28,12 @@
   "engines": {
     "node": ">=18"
   },
-  "files": ["index.js", "patterns.js", "api.js", "formatter.js", "LICENSE", "README.md"]
+  "files": [
+    "index.js",
+    "patterns.js",
+    "api.js",
+    "formatter.js",
+    "LICENSE",
+    "README.md"
+  ]
 }
