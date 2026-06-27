@@ -3,7 +3,7 @@
  *
  * Core IOC scanning engine for all DugganUSA integrations.
  * Extract IPs, domains, hashes, CVEs from text and correlate
- * against 1.08M+ threat indicators via the DugganUSA API.
+ * against 1.10M+ threat indicators via the DugganUSA API.
  *
  * This is the TIMI — the Technology Independent Machine Interface.
  * Every integration (VS Code, Chrome, CLI, Slack, Splunk, etc.)
