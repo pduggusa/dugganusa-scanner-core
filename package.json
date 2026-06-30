@@ -1,6 +1,6 @@
 {
   "name": "@dugganusa/threat-scanner-core",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Core IOC scanning engine for DugganUSA integrations. Extract IPs, domains, hashes, CVEs from text and correlate against 1.5M+ threat indicators.",
   "main": "index.js",
   "exports": {

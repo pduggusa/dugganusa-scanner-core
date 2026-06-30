@@ -1,5 +1,5 @@
 /**
- * DugganUSA API client — lookup and correlate indicators against 1.10M+ IOC index.
+ * DugganUSA API client — lookup and correlate indicators against 1.5M+ IOC index.
  *
  * Uses only Node builtins (https module). No native deps. Cross-platform.
  * Includes in-memory cache with configurable TTL.
