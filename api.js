@@ -72,13 +72,19 @@ async function lookupIOC(value, options = {}) {
       .reduce((sum, hits) => sum + (Array.isArray(hits) ? hits.length : 0), 0);
 
     const result = totalHits > 0
-      ? { found: true, hits: totalHits, data: correlations }
-      : { found: false, hits: 0 };
+      ? { found: true, ok: true, status: 'found', hits: totalHits, data: correlations }
+      : { found: false, ok: true, status: 'not-found', hits: 0 };
 
     cache.set(cacheKey, { ts: Date.now(), result });
     return result;
   } catch (err) {
-    return { found: false, hits: 0, error: err.message };
+    // FAIL-CLOSED SIGNAL (2026-07-19). Previously an expired key, a 429, a
+    // timeout, or an outage all returned { found: false } — indistinguishable
+    // from a verified-clean lookup. Consumers filtering on `found` therefore
+    // turned a CI security gate GREEN during an outage.
+    // `found` is retained for backwards compatibility, but `ok:false` and
+    // status:'unknown' let callers refuse to pass on absence of evidence.
+    return { found: false, ok: false, status: 'unknown', hits: 0, error: err.message };
   }
 }
 
@@ -158,7 +164,7 @@ async function lookupRelay(ip, options = {}) {
 
     return await httpGet(url, headers, timeout);
   } catch (err) {
-    return { found: false, error: err.message };
+    return { found: false, ok: false, status: 'unknown', error: err.message };
   }
 }
 
@@ -182,7 +188,7 @@ async function huntTorRelays(options = {}) {
 
     return await httpGet(url, headers, timeout);
   } catch (err) {
-    return { found: false, error: err.message };
+    return { found: false, ok: false, status: 'unknown', error: err.message };
   }
 }
 
