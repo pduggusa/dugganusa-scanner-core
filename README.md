@@ -2,7 +2,7 @@
 
 > The TIMI — Technology Independent Machine Interface. The shared IOC scanning engine every DugganUSA integration is a thin wrapper around.
 
-Extract IPs, domains, hashes, CVEs, and `.onion` addresses from arbitrary text, then correlate them against the DugganUSA threat-intel platform — **1.5M+ IOCs** drawn from **15 external feed sources** plus our own first-hand detections, part of a corpus of **~38M documents across 65 indexes**.
+Extract IPs, domains, hashes, CVEs, and `.onion` addresses from arbitrary text, then correlate them against the DugganUSA threat-intel platform — **1.9M+ IOCs** drawn from **15 external feed sources** plus our own first-hand detections, part of a corpus of **~68M documents across 70 indexes**.
 
 Zero native dependencies. Node builtins only (`https`). Cross-platform. In-memory caching with configurable TTL.
 

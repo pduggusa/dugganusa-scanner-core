@@ -2,6 +2,15 @@
 
 All notable changes to `@dugganusa/threat-scanner-core` are documented here.
 
+## [1.3.1] - 2026-09-29
+
+### Security
+- First tagged release carrying the 1.3.0 three-state result (`ok`/`status`): outages and non-2xx responses no longer read as clean. 1.3.0 was committed but never tagged.
+
+### Changed
+- Refreshed corpus figures from the live `/api/v1/search/stats` (1.9M+ IOCs, ~68M documents across 70 indexes).
+- Removed the retired "275+ consumers in 46 countries" line. It counted blocked, User-Agent-less scrapers as consumers, so we stopped quoting it on 2026-05-30.
+
 ## [1.2.2] - 2026-06-30
 
 ### Fixed
