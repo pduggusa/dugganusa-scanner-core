@@ -1,8 +1,12 @@
 # @dugganusa/threat-scanner-core
 
+**You do you. I do me. We share contexts.**
+
+Each integration keeps its own surface; this engine is the shared context underneath them all.
+
 > The TIMI — Technology Independent Machine Interface. The shared IOC scanning engine every DugganUSA integration is a thin wrapper around.
 
-Extract IPs, domains, hashes, CVEs, and `.onion` addresses from arbitrary text, then correlate them against the DugganUSA threat-intel platform — **1.9M+ IOCs** drawn from **15 external feed sources** plus our own first-hand detections, part of a corpus of **~68M documents across 70 indexes**.
+Extract IPs, domains, hashes, CVEs, and `.onion` addresses from arbitrary text, then correlate them against the DugganUSA threat-intel platform — the **DugganUSA Feed**, drawn from external feed sources plus our own first-hand detections ([live counts](https://analytics.dugganusa.com/api/v1/search/stats)).
 
 Zero native dependencies. Node builtins only (`https`). Cross-platform. In-memory caching with configurable TTL.
 
@@ -16,7 +20,7 @@ Zero native dependencies. Node builtins only (`https`). Cross-platform. In-memor
   - **Accuracy** — [`/api/v1/spamhaus-validation`](https://analytics.dugganusa.com/api/v1/spamhaus-validation): Spamhaus independently corroborates the calls we contribute.
   - **Liveness** — [`/api/v1/feed-efficacy`](https://analytics.dugganusa.com/api/v1/feed-efficacy): opt-in consumer reports of when our indicators actually fire on real traffic — proof the feed is operationally live, not just large.
 - **Supply-chain coverage.** The corpus now ingests **OSV malicious-package feeds for both npm and PyPI**, plus daily **GitHub Hunt** detection of malware-staging repos and install-time / build-time execution signatures — so a `lookupIOC()` on a package name has teeth.
-- Doc and description figures aligned to the current **1.5M+** IOC count.
+- Doc and description figures aligned to the then-current IOC count.
 
 ---
 
