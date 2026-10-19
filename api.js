@@ -1,5 +1,5 @@
 /**
- * DugganUSA API client — lookup and correlate indicators against 1.9M+ IOC index.
+ * DugganUSA API client — lookup and correlate indicators against the DugganUSA IOC index (live counts: /api/v1/search/stats).
  *
  * Uses only Node builtins (https module). No native deps. Cross-platform.
  * Includes in-memory cache with configurable TTL.
@@ -27,6 +27,15 @@ function httpGet(url, headers = {}, timeout = DEFAULT_TIMEOUT) {
       let body = '';
       res.on('data', chunk => body += chunk);
       res.on('end', () => {
+        // A 401 (no/unregistered key), 429 (daily limit) or 5xx carries a parseable JSON error
+        // body with no correlations. Resolving it made lookupIOC return ok:true/not-found (and
+        // cache it) for every keyless call, defeating the fail-closed signal. Reject instead.
+        if (res.statusCode < 200 || res.statusCode >= 300) {
+          let msg = 'HTTP ' + res.statusCode;
+          try { const j = JSON.parse(body); if (j.error) msg += ' (' + j.error + ')'; } catch {}
+          const err = new Error(msg); err.statusCode = res.statusCode;
+          return reject(err);
+        }
         try { resolve(JSON.parse(body)); }
         catch { reject(new Error('Invalid JSON response')); }
       });
@@ -154,18 +163,13 @@ function cacheStats() {
  * @returns {Promise<Object>}
  */
 async function lookupRelay(ip, options = {}) {
-  const apiUrl = options.apiUrl || DEFAULT_API_URL;
-  const timeout = options.timeout || DEFAULT_TIMEOUT;
-
-  try {
-    const url = apiUrl + '/tor/relay/' + encodeURIComponent(ip);
-    const headers = {};
-    if (options.apiKey) headers['Authorization'] = 'Bearer ' + options.apiKey;
-
-    return await httpGet(url, headers, timeout);
-  } catch (err) {
-    return { found: false, ok: false, status: 'unknown', error: err.message };
-  }
+  // /tor/relay/:id takes a relay FINGERPRINT, so passing an IP always returned 404
+  // "Relay not found". Resolve the IP through /tor/relays (exact address match) instead.
+  const r = await checkTorRelay(ip, options);
+  if (r.error) return { found: false, ok: false, status: 'unknown', error: r.error };
+  return r.isRelay
+    ? { found: true, ok: true, status: 'found', relay: r.data }
+    : { found: false, ok: true, status: 'not-found' };
 }
 
 /**
@@ -209,14 +213,17 @@ async function checkTorRelay(ip, options = {}) {
   try {
     const url = new URL(apiUrl + '/tor/relays');
     url.searchParams.set('q', ip);
-    url.searchParams.set('limit', '1');
+    url.searchParams.set('limit', '5');
 
     const headers = {};
     if (options.apiKey) headers['Authorization'] = 'Bearer ' + options.apiKey;
 
     const json = await httpGet(url.toString(), headers, timeout);
+    // The search is fuzzy: q=1.1.1.1 returns relay 89.247.27.1 as its top hit. Only an exact
+    // address match is a relay; anything else reported every IP-shaped string as Tor.
     const hits = json.data?.hits || json.data?.relays || [];
-    return { isRelay: hits.length > 0, data: hits[0] || null };
+    const match = hits.find(h => h.address === ip || h.ip === ip) || null;
+    return { isRelay: !!match, data: match };
   } catch (err) {
     return { isRelay: false, error: err.message };
   }

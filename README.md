@@ -27,7 +27,8 @@ Zero native dependencies. Node builtins only (`https`). Cross-platform. In-memor
 ## Install
 
 ```bash
-npm install @dugganusa/threat-scanner-core
+# Not yet published to the npm registry -- install from GitHub:
+npm install github:pduggusa/dugganusa-scanner-core
 ```
 
 ## Usage
@@ -47,7 +48,7 @@ const results = await lookupBatch(['185.39.19.176', 'CVE-2026-21643'], { apiKey:
 
 ## API key required
 
-The DugganUSA STIX/correlation feed is **API-key-enforced**. Anonymous requests return `401`; an unregistered Bearer token returns `429`. The free tier is a **free, registered key** — not anonymous access. Register for a key at [analytics.dugganusa.com](https://analytics.dugganusa.com), then pass it as `options.apiKey`.
+The DugganUSA STIX/correlation feed is **API-key-enforced**. Anonymous requests and unregistered keys return `401`; a registered key past its daily limit returns `429` (free tier: 10/day). Either way `lookupIOC` returns `ok:false, status:'unknown'` — never `not-found`. The free tier is a **free, registered key** — not anonymous access. Register for a key at [analytics.dugganusa.com](https://analytics.dugganusa.com), then pass it as `options.apiKey`.
 
 ## Exports
 

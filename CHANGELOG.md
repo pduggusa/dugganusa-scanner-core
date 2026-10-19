@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.2] - 2026-10-19
+
+### Security
+- **The 1.3.x fail-closed fix did not cover HTTP errors.** `httpGet` resolved any JSON body regardless of status, so a `401` (no key / unregistered key) or `429` (daily limit) returned `{ ok: true, status: 'not-found' }` and was cached for the TTL. Non-2xx now rejects, so these surface as `ok: false, status: 'unknown'`.
+
+### Fixed
+- `checkTorRelay` reported almost any IP as a Tor relay: `/tor/relays?q=` is a fuzzy search (`q=1.1.1.1` returns relay `89.247.27.1`). It now requires an exact address match.
+- `lookupRelay(ip)` always returned "Relay not found": `/tor/relay/:id` takes a fingerprint, not an IP. It now resolves the IP via `checkTorRelay`.
+- README install line: the package is not on the npm registry; install from GitHub.
+
 All notable changes to `@dugganusa/threat-scanner-core` are documented here.
 
 ## [1.3.1] - 2026-09-29
