@@ -1,5 +1,7 @@
 # @dugganusa/threat-scanner-core
 
+**Docs:** https://docs.dugganusa.com/quickstart/
+
 **You do you. I do me. We share contexts.**
 
 Each integration keeps its own surface; this engine is the shared context underneath them all.
