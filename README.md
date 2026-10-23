@@ -15,8 +15,8 @@ Zero native dependencies. Node builtins only (`https`). Cross-platform. In-memor
 ## What's New in 1.2.1
 
 - **Validated feed, not just a big feed.** The corpus this engine correlates against is now independently validated on four live, no-auth, durable endpoints — so you can check our work, not just take our word:
-  - **Novelty** — [`/api/v1/feed-uniqueness`](https://analytics.dugganusa.com/api/v1/feed-uniqueness): most of our IOCs (~75%+ live) are **not** in ThreatFox.
-  - **Timeliness** — [`/api/v1/kev-lead`](https://analytics.dugganusa.com/api/v1/kev-lead): a live ledger of how far ahead of CISA KEV we flagged each exploited CVE — leads, same-day, and no-receipt shown honestly.
+  - **Novelty** — [`/api/v1/feed-uniqueness`](https://analytics.dugganusa.com/api/v1/feed-uniqueness): how much of our independently sourced data is not already in ThreatFox, so you can see what this feed adds beside the feeds you already run.
+  - **Timeliness** — [`/api/v1/kev-lead`](https://analytics.dugganusa.com/api/v1/kev-lead): a live ledger of when each exploited CVE entered our corpus next to its CISA KEV listing date, with receipts, including the ones we had no record of.
   - **Accuracy** — [`/api/v1/spamhaus-validation`](https://analytics.dugganusa.com/api/v1/spamhaus-validation): Spamhaus independently corroborates the calls we contribute.
   - **Liveness** — [`/api/v1/feed-efficacy`](https://analytics.dugganusa.com/api/v1/feed-efficacy): opt-in consumer reports of when our indicators actually fire on real traffic — proof the feed is operationally live, not just large.
 - **Supply-chain coverage.** The corpus now ingests **OSV malicious-package feeds for both npm and PyPI**, plus daily **GitHub Hunt** detection of malware-staging repos and install-time / build-time execution signatures — so a `lookupIOC()` on a package name has teeth.
